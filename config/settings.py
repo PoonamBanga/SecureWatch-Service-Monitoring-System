@@ -77,6 +77,10 @@ AUTH_USER_MODEL = 'accounts.User'
 
 WSGI_APPLICATION = 'config.wsgi.application'
 
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+DEFAULT_FROM_EMAIL = 'alerts@securewatch.local'
+
+
 
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases

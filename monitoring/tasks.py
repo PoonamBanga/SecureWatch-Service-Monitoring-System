@@ -3,6 +3,7 @@ import requests
 from celery import shared_task
 from django.utils import timezone
 from .models import Service, CheckResult
+from django.core.mail import send_mail
 
 @shared_task
 def check_service(service_id):
@@ -25,7 +26,16 @@ def check_service(service_id):
         service = service,
         status = status,
         response_time_ms=elapsed_ms
-    )        
+    )   
+
+    if status == 'down':
+        send_mail(
+            subject=f'🔴 {service.name} is DOWN',
+            message=f'{service.name} ({service.url}) failed its health check.',
+            from_email=None,
+            recipient_list=[service.owner.email],
+            fail_silently=True,
+        )     
 
 
 @shared_task
